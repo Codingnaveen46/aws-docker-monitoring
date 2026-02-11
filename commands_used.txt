@@ -1,0 +1,96 @@
+
+# **EC2 Restart → Docker Monitoring Stack Recovery Commands**
+
+## **1. SSH into EC2**
+
+```bash
+ssh -i ".pem" ubuntu@<your-ec2-public-ip>
+```
+
+---
+
+## **2. Check running containers**
+
+```bash
+docker ps
+```
+
+---
+
+## **3. Check all containers (including stopped ones)**
+
+```bash
+docker ps -a
+```
+
+---
+
+## **4. Start previously created containers**
+
+```bash
+docker start grafana
+docker start prometheus
+docker start node-exporter
+docker start webapp
+```
+
+---
+
+## **5. If any container didn’t exist (optional recreation commands)**
+
+### **Node Exporter**
+
+```bash
+docker run -d --name node-exporter -p 9100:9100 prom/node-exporter
+```
+
+### **Grafana**
+
+```bash
+docker run -d --name grafana -p 3000:3000 grafana/grafana
+```
+
+### **Nginx Webapp**
+
+```bash
+docker run -d --name webapp -p 80:80 nginx
+```
+
+### **Prometheus**
+
+```bash
+docker run -d --name prometheus -p 9090:9090 prom/prometheus
+```
+
+---
+
+## **6. Make all containers auto-start on EC2 reboot**
+
+(Recommended to avoid the same issue next time)
+
+```bash
+docker container update --restart=always grafana
+docker container update --restart=always prometheus
+docker container update --restart=always node-exporter
+docker container update --restart=always webapp
+```
+
+---
+
+## **7. Verify everything**
+
+```bash
+docker ps
+```
+
+---
+
+## **8. Access URLs**
+
+* Prometheus → `http://<public-ip>:9090`
+* Grafana → `http://<public-ip>:3000`
+* Node Exporter → `http://<public-ip>:9100/metrics`
+* Web Application → `http://<public-ip>`
+
+---
+
