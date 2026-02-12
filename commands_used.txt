@@ -67,7 +67,7 @@ docker run -d --name prometheus -p 9090:9090 prom/prometheus
 ## **6. Make all containers auto-start on EC2 reboot**
 
 (Recommended to avoid the same issue next time)
-
+e
 ```bash
 docker container update --restart=always grafana
 docker container update --restart=always prometheus
@@ -97,3 +97,5 @@ docker ps
 #added new line 
 
 #test line 
+
+#test line for ne 
